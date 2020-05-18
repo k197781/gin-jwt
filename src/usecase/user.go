@@ -9,6 +9,11 @@ type userInteractor struct {
 	repository repository.UserRepository
 }
 
+type SingnInRequest struct {
+	Email    string `json:"email"`
+	Password string `json:"password"`
+}
+
 type UserInteractor interface {
 	GetUserById(id int64) (*entity.User, error)
 }

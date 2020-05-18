@@ -14,7 +14,6 @@ type UserHandler struct {
 
 func (h *UserHandler) GetUserById(c *gin.Context) {
 	user, err := h.userInteractor.GetUserById(int64(1))
-	log.Println(user)
 	if err != nil {
 		log.Println(err)
 	}

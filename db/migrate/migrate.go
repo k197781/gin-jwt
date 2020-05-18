@@ -10,5 +10,6 @@ func main() {
 
 	db.Connect.DropTable(entity.User{})
 
-	db.Connect.AutoMigrate(entity.User{})
+	db.Connect.AutoMigrate(entity.User{}).
+		AddUniqueIndex("idx_user_email", "email")
 }

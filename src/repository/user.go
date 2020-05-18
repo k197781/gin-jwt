@@ -15,6 +15,7 @@ type userRepository struct {
 type UserRepository interface {
 	GetUserById(id int64) (*entity.User, error)
 	CreateUser(email string, name string, password string) (*entity.User, error)
+	SignInUser(email string, password string) (*entity.User, error)
 }
 
 func (repo *userRepository) GetUserById(id int64) (*entity.User, error) {
@@ -38,6 +39,21 @@ func (repo *userRepository) CreateUser(email string, name string, password strin
 		Password: string(hash),
 	}
 	repo.db.Create(&user)
+	return user, nil
+}
+
+func (repo *userRepository) SignInUser(email string, password string) (*entity.User, error) {
+	user := &entity.User{}
+	result := repo.db.Where("email = ?", email).Find(user)
+	if result.RecordNotFound() {
+		err := errors.New("Failed login")
+		return nil, err
+	}
+	err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password))
+	if err != nil {
+		err := errors.New("Failed login")
+		return nil, err
+	}
 	return user, nil
 }
 
